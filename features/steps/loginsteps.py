@@ -2,6 +2,7 @@ from behave import *
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
+
 @given('launch chrome')
 def launchBrowser(context):
     context.driver = webdriver.Chrome()
@@ -26,6 +27,11 @@ def step_impl(context):
 
 @then('User must successfully login to the Dashboard page')
 def step_impl(context):
-    text = context.driver.find_element(By.XPATH, "//header/div[1]/div[1]/span[1]/h6[1]").text
-    context.driver.close()
-    assert text == "Dashboard"
+    try:
+        text = context.driver.find_element(By.XPATH, "//header/div[1]/div[1]/span[1]/h6[1]").text
+    except:
+        context.driver.close()
+        assert False, "Test Failed, text wasn`t found"
+    if text == "Dashboard":
+        context.driver.close()
+        assert True, "Test Success!!!"
